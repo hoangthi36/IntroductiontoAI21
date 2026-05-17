@@ -1,5 +1,5 @@
-const INITIAL_VIEW = [20.9945, 105.8155];
-const INITIAL_ZOOM = 15;
+const INITIAL_VIEW = [-33.8688, 151.2093];
+const INITIAL_ZOOM = 11;
 
 let nodeFeatures = [];
 let selectedA = null;

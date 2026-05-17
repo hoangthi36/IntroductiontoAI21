@@ -153,19 +153,23 @@ def _nearest_node(graph: nx.MultiDiGraph, x: float, y: float):
     if _DISTANCE_MODULE is not None:
         nearest_func = getattr(_DISTANCE_MODULE, "nearest_nodes", None)
         if nearest_func is not None:
-            node_id = nearest_func(graph, x, y)
-            if hasattr(node_id, "item"):
-                try:
-                    node_id = node_id.item()
-                except Exception:
-                    pass
-            if isinstance(node_id, (list, tuple)):
-                node_id = node_id[0]
-            if not graph.has_node(node_id):
-                alt = str(node_id)
-                if graph.has_node(alt):
-                    node_id = alt
-            return node_id  # type: ignore[return-value]
+            try:
+                node_id = nearest_func(graph, x, y)
+                if hasattr(node_id, "item"):
+                    try:
+                        node_id = node_id.item()
+                    except Exception:
+                        pass
+                if isinstance(node_id, (list, tuple)):
+                    node_id = node_id[0]
+                if not graph.has_node(node_id):
+                    alt = str(node_id)
+                    if graph.has_node(alt):
+                        node_id = alt
+                return node_id  # type: ignore[return-value]
+            except Exception:
+                # Fall back to brute force nearest search below.
+                pass
     # Fallback: brute force search (adequate for small demo graphs)
     best_node = None
     best_dist = float("inf")
@@ -631,6 +635,9 @@ class PathfindingDemo:
                     "properties": {
                         "id": node,
                         "degree": degree_view[node],
+                        "name": data.get("name"),
+                        "railway": data.get("railway"),
+                        "public_transport": data.get("public_transport"),
                     },
                 }
             )
@@ -657,7 +664,7 @@ class PathfindingDemo:
         }
 
     def edge_features(self) -> List[Dict[str, object]]:
-        """Return GeoJSON-like features representing the road network."""
+        """Return GeoJSON-like features representing the transport network."""
 
         features: List[Dict[str, object]] = []
         for u, v, key, data in self.graph.edges(keys=True, data=True):
@@ -668,6 +675,12 @@ class PathfindingDemo:
             name = data.get("name")
             if isinstance(name, list):
                 name = ", ".join(map(str, name))
+            route_ref = data.get("ref")
+            if isinstance(route_ref, list):
+                route_ref = ", ".join(map(str, route_ref))
+            route_name = data.get("route")
+            if isinstance(route_name, list):
+                route_name = ", ".join(map(str, route_name))
             features.append(
                 {
                     "type": "Feature",
@@ -678,6 +691,9 @@ class PathfindingDemo:
                         "key": key,
                         "name": name,
                         "length_m": length,
+                        "railway": data.get("railway"),
+                        "route_ref": route_ref,
+                        "route": route_name,
                     },
                 }
             )
@@ -888,6 +904,9 @@ class PathfindingDemo:
                     "from": u,
                     "to": v,
                     "name": edge_data.get("name"),
+                    "railway": edge_data.get("railway"),
+                    "route_ref": edge_data.get("ref"),
+                    "route": edge_data.get("route"),
                     "length_m": length,
                     "penalty_multiplier": penalty,
                     "cost_m": cost,

@@ -1,9 +1,9 @@
-const FOCUS_PLACE = "Khuong Dinh, Thanh Xuan, Hanoi";
+const FOCUS_PLACE = "Sydney, New South Wales, Australia";
 const DEFAULT_PLACE = FOCUS_PLACE;
 const INITIAL_VIEW = [-33.8688, 151.2093];
 const INITIAL_ZOOM = 11;
 
-let selectionMode = "start  ";
+let selectionMode = "start";
 let cachedPlace = DEFAULT_PLACE;
 let startLatLng = null;
 let goalLatLng = null;
@@ -36,7 +36,7 @@ const deleteNodeBtn = document.getElementById("delete-node-btn");
 
 placeInput.value = DEFAULT_PLACE;
 placeInput.readOnly = true;
-placeInput.title = "Khu vực cố định: metro Syney, Australia";
+placeInput.title = "Khu vực cố định: mạng metro/tàu Sydney, Australia";
 if (graphmlOutput) {
   graphmlOutput.value = "Chưa có dữ liệu GraphML.";
 }
@@ -69,8 +69,10 @@ const edgeLayer = L.geoJSON(null, {
       : "Cạnh";
     const hasLength = typeof props.length_m === "number";
     const length = hasLength ? `${Number(props.length_m).toFixed(1)} m` : null;
-    const name = props.name ? `Đường: ${props.name}` : null;
+    const routeRef = props.route_ref ? `Tuyen: ${props.route_ref}` : null;
+    const name = props.name ? `Ten canh: ${props.name}` : null;
     const details = [direction];
+    if (routeRef) details.push(routeRef);
     if (name) details.push(name);
     if (length) details.push(`Dài: ${length}`);
     layer.bindTooltip(details.join("\n"));
@@ -380,7 +382,7 @@ function updateResultPanel(data) {
     : "";
   const segmentsHtml = data.segments
     .map((segment, index) => {
-      const name = segment.name || "Đường không tên";
+      const name = segment.name || segment.route_ref || "Tuyến không tên";
       const length = typeof segment.length_m === "number" ? segment.length_m.toFixed(1) : "?";
       const hasCost =
         typeof segment.cost_m === "number" &&
@@ -591,7 +593,7 @@ async function loadMap() {
     clearError();
     const place = FOCUS_PLACE;
     if (graphSummary) {
-      graphSummary.textContent = "Đang tải dữ liệu Khương Đình...";
+        graphSummary.textContent = "Đang tải dữ liệu metro Sydney...";
     }
     updateGraphmlOutput("");
     const data = await fetchJson("/api/load", { place });

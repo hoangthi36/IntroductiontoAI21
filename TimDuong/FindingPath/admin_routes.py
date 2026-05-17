@@ -99,14 +99,14 @@ def init_admin(
     def _ensure_edge_exists(u: str, v: str) -> None:
         graph = load_base_graph()
         if not (graph.has_node(u) and graph.has_node(v)):
-            raise ValueError(f"Không tìm thấy node {u} hoặc {v} trong khu vực Khương Đình.")
+            raise ValueError(f"Không tìm thấy node {u} hoặc {v} trong mạng Sydney.")
         if not (graph.has_edge(u, v) or graph.has_edge(v, u)):
-            raise ValueError("Hai node không kề nhau trong khu vực Khương Đình.")
+            raise ValueError("Hai node không kề nhau trong mạng Sydney.")
 
     def _ensure_nodes_exist(u: str, v: str) -> None:
         graph = load_base_graph()
         if not (graph.has_node(u) and graph.has_node(v)):
-            raise ValueError(f"Khong tim thay node {u} hoac {v} trong khu vuc Khuong Dinh.")
+            raise ValueError(f"Khong tim thay node {u} hoac {v} trong mang Sydney.")
 
     def _compute_shortest_path(u: str, v: str) -> Tuple[NodePath, List[Tuple[float, float]], float]:
         """Return node path, coordinates and length along the shortest route."""

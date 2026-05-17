@@ -19,13 +19,12 @@ app = Flask(__name__, static_folder="static", template_folder="templates")
 app.secret_key = os.getenv("FLASK_SECRET_KEY", "dev-admin-secret")
 
 DEFAULT_DIST = 750
-# Use all street types (not just driveable) to match "full street" requirement.
+# Keep graph behavior generic; data is loaded from a fixed offline GraphML.
 DEFAULT_NETWORK_TYPE = "all"
 FOCUS_CENTER: Coordinate = (-33.8688, 151.2093)
 # Resolve the GraphML path relative to this file, so it works regardless of the cwd.
 GRAPHML_PATH = (Path(__file__).resolve().parent / "data" / "sydney_metro.graphml")
 CREATED_NODES_PATH = (Path(__file__).resolve().parent / "data" / "created_nodes.json")
-FOCUS_CENTER: Coordinate = (-33.8688, 151.2093)
 
 
 def _normalize_center(value: Optional[Union[Mapping[str, float], Iterable[float]]]) -> Optional[Coordinate]:
@@ -96,11 +95,11 @@ def _create_demo(
 
 @lru_cache(maxsize=1)
 def _load_base_graph() -> nx.MultiDiGraph:
-    """Load the static Khuong Dinh graph once from disk."""
+    """Load the static Sydney metro/train graph once from disk."""
 
     if not GRAPHML_PATH.exists():
         raise RuntimeError(
-            f"Offline graph not found at {GRAPHML_PATH}. Please place the Khuong Dinh GraphML there."
+            f"Offline graph not found at {GRAPHML_PATH}. Please place the Sydney metro GraphML there."
         )
     graph = nx.read_graphml(GRAPHML_PATH)
     if not isinstance(graph, nx.MultiDiGraph):
@@ -110,7 +109,7 @@ def _load_base_graph() -> nx.MultiDiGraph:
 
 def _load_focus_demo(network_type: str = DEFAULT_NETWORK_TYPE) -> PathfindingDemo:
     """
-    Always build the fixed Khuong Dinh graph from a local GraphML only.
+    Always build the fixed Sydney metro graph from a local GraphML only.
     Network downloads are disabled; ensure GRAPHML_PATH exists.
     """
     return PathfindingDemo(graph=_load_base_graph(), network_type=network_type)
@@ -135,7 +134,7 @@ def index() -> str:
 @app.post("/api/load")
 def api_load():
     payload = request.get_json(force=True, silent=True) or {}
-    # Lock the app to the Khuong Dinh area to keep the dataset consistent.
+    # Lock the app to the fixed Sydney metro dataset to keep results consistent.
     network_type = DEFAULT_NETWORK_TYPE
 
     try:
@@ -243,7 +242,7 @@ def api_delete_node(node_id: str):
 def api_path():
     payload = request.get_json(force=True, silent=True) or {}
 
-    # Always use the fixed Khuong Dinh graph.
+    # Always use the fixed Sydney metro graph.
     network_type = DEFAULT_NETWORK_TYPE
 
     algorithm = payload.get("algorithm", "astar")
