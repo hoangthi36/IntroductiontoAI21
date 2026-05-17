@@ -10,8 +10,8 @@ from flask import Blueprint, jsonify, render_template, request, session
 from pathfinding import PathfindingDemo
 from thuattoan import NodePath
 
-ADMIN_USERNAME = os.getenv("ADMIN_USERNAME", "Dungdz0201")
-ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "02012005")
+ADMIN_USERNAME = os.getenv("ADMIN_USERNAME", "HoangThi")
+ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "062005")
 ADMIN_SESSION_KEY = "is_admin_authenticated"
 ADMIN_EDGE_PENALTIES: Dict[Tuple[str, str], Dict[str, Any]] = {}
 ADMIN_FORBIDDEN_EDGES: set[Tuple[str, str]] = set()

@@ -21,11 +21,11 @@ app.secret_key = os.getenv("FLASK_SECRET_KEY", "dev-admin-secret")
 DEFAULT_DIST = 750
 # Use all street types (not just driveable) to match "full street" requirement.
 DEFAULT_NETWORK_TYPE = "all"
-FOCUS_CENTER: Coordinate = (20.9945, 105.8155)
+FOCUS_CENTER: Coordinate = (-33.8688, 151.2093)
 # Resolve the GraphML path relative to this file, so it works regardless of the cwd.
-GRAPHML_PATH = (Path(__file__).resolve().parent / "data" / "khuong_dinh.graphml")
+GRAPHML_PATH = (Path(__file__).resolve().parent / "data" / "sydney_metro.graphml")
 CREATED_NODES_PATH = (Path(__file__).resolve().parent / "data" / "created_nodes.json")
-FOCUS_CENTER: Coordinate = (20.9945, 105.8155)
+FOCUS_CENTER: Coordinate = (-33.8688, 151.2093)
 
 
 def _normalize_center(value: Optional[Union[Mapping[str, float], Iterable[float]]]) -> Optional[Coordinate]:

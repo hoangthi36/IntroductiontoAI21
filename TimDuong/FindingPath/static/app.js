@@ -1,9 +1,9 @@
 const FOCUS_PLACE = "Khuong Dinh, Thanh Xuan, Hanoi";
 const DEFAULT_PLACE = FOCUS_PLACE;
-const INITIAL_VIEW = [20.9945, 105.8155];
-const INITIAL_ZOOM = 15;
+const INITIAL_VIEW = [-33.8688, 151.2093];
+const INITIAL_ZOOM = 11;
 
-let selectionMode = "start";
+let selectionMode = "start  ";
 let cachedPlace = DEFAULT_PLACE;
 let startLatLng = null;
 let goalLatLng = null;
@@ -36,7 +36,7 @@ const deleteNodeBtn = document.getElementById("delete-node-btn");
 
 placeInput.value = DEFAULT_PLACE;
 placeInput.readOnly = true;
-placeInput.title = "Khu vực cố định: Khương Đình, Thanh Xuân, Hà Nội";
+placeInput.title = "Khu vực cố định: metro Syney, Australia";
 if (graphmlOutput) {
   graphmlOutput.value = "Chưa có dữ liệu GraphML.";
 }
