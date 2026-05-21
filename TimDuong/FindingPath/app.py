@@ -96,7 +96,7 @@ def _create_demo(
 
 @lru_cache(maxsize=1)
 def _load_base_graph() -> nx.MultiDiGraph:
-    """Load the static Khuong Dinh graph once from disk."""
+    """Load the static Sydney graph once from disk."""
 
     if not GRAPHML_PATH.exists():
         raise RuntimeError(

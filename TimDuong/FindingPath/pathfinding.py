@@ -153,19 +153,28 @@ def _nearest_node(graph: nx.MultiDiGraph, x: float, y: float):
     if _DISTANCE_MODULE is not None:
         nearest_func = getattr(_DISTANCE_MODULE, "nearest_nodes", None)
         if nearest_func is not None:
-            node_id = nearest_func(graph, x, y)
-            if hasattr(node_id, "item"):
-                try:
-                    node_id = node_id.item()
-                except Exception:
-                    pass
-            if isinstance(node_id, (list, tuple)):
-                node_id = node_id[0]
-            if not graph.has_node(node_id):
-                alt = str(node_id)
-                if graph.has_node(alt):
-                    node_id = alt
-            return node_id  # type: ignore[return-value]
+            try:
+                node_id = nearest_func(graph, x, y)
+            except ImportError:
+                # Optional nearest-node acceleration is unavailable in this environment.
+                # Fall back to a small brute-force scan so the API keeps working.
+                pass
+            except Exception:
+                # If the accelerated lookup fails for any other reason, use the fallback path.
+                pass
+            else:
+                if hasattr(node_id, "item"):
+                    try:
+                        node_id = node_id.item()
+                    except Exception:
+                        pass
+                if isinstance(node_id, (list, tuple)):
+                    node_id = node_id[0]
+                if not graph.has_node(node_id):
+                    alt = str(node_id)
+                    if graph.has_node(alt):
+                        node_id = alt
+                return node_id  # type: ignore[return-value]
     # Fallback: brute force search (adequate for small demo graphs)
     best_node = None
     best_dist = float("inf")
