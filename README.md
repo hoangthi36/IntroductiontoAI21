@@ -61,14 +61,14 @@ Sau đó truy cập http://127.0.0.1:5000/ để sử dụng. Một số tính n
 
 ## Sử dụng script CLI
 
-Ví dụ chạy tìm đường bằng A* giữa hai địa điểm tại Hà Nội :
+Ví dụ chạy tìm đường bằng A* giữa hai địa điểm trên metro Sydney :
 
 python pathfinding.py \
-  --place "Khuong Dinh, Thanh Xuan, Hanoi, Vietnam" \
+  --place "Metro Sydney, Australia" \
   --start "20.9945,105.8150" \
   --goal "20.9970,105.8180" \
   --algorithm astar \
-  --output khuong_dinh_astar.html
+  --output sydney_metro_astar.html
 
 ### Tham số chính
 
@@ -110,7 +110,7 @@ Sau khi chạy, file HTML có thể được mở trong trình duyệt để qua
 ## Trang admin (quản trị)
 - Truy cập vào http://127.0.0.1:5000/admin để có thể đăng nhập để cập nhật tình hình giao thông cho các tuyến đường khu vực Khương Đình
 - Ứng dụng cố định dữ liệu khu vực Khương Đình (Thanh Xuân, Hà Nội) từ GraphML offline, không tải nơi khác.
-- Mở `/admin` sau khi chạy Flask. Đăng nhập bằng `ADMIN_USERNAME` và `ADMIN_PASSWORD` (mặc định `Dungdz0201` / `02012005` hoặc giá trị đặt qua biến môi trường). Chưa đăng nhập chỉ thấy form giữa màn hình.
+- Mở `/admin` sau khi chạy Flask. Đăng nhập bằng `ADMIN_USERNAME` và `ADMIN_PASSWORD` (mặc định `HoangThi` / `062005` hoặc giá trị đặt qua biến môi trường). Chưa đăng nhập chỉ thấy form giữa màn hình.
 - Sau khi đăng nhập mới hiện map và điều khiển: click 2 node liền kề để chọn đoạn đường, nhập hệ số phạt (>1) để tăng `cost` cho cả hai chiều. Nút Xóa bỏ hệ số đoạn. Các đoạn không có cost là các đoạn bị cấm.
 - Hệ số chỉ lưu trong RAM: tắt server là reset. Người dùng trang chính tự động nhận hệ số mới khi gọi API (đều dùng chung đồ thị Khương Đình).
 - Nền màn hình login đọc từ `static/bg-admin.jpg` (thay file này nếu muốn nền khác).
