@@ -100,7 +100,7 @@ def _load_base_graph() -> nx.MultiDiGraph:
 
     if not GRAPHML_PATH.exists():
         raise RuntimeError(
-            f"Offline graph not found at {GRAPHML_PATH}. Please place the Khuong Dinh GraphML there."
+            f"Offline graph not found at {GRAPHML_PATH}. Please place the Sydney metro GraphML there."
         )
     graph = nx.read_graphml(GRAPHML_PATH)
     if not isinstance(graph, nx.MultiDiGraph):
